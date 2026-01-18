@@ -1,11 +1,11 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Sidebar = ({ isCollapsed, setIsCollapsed, onLogout }) => {
-    const location = useLocation();
-    
+        
     // This line fetches the 'admin' or 'staff' label we saved at login
     const userRole = localStorage.getItem('role');
+    
     const menuItems = [
         { name: 'Dashboard', path: '/dashboard', icon: '📊' },
         { name: 'Assets', path: '/assets', icon: '🧩' },
@@ -87,4 +87,5 @@ const s = {
 
 
 export default Sidebar;
+
 
