@@ -35,7 +35,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, onLogout }) => {
 
             <nav style={s.nav}>
                 {menuItems.map((item) => (
-                    <NavLink 
+                    <Link 
                         key={item.path} 
                         to={item.path} 
                         // This class logic is what handles the "active" purple/blue highlight
@@ -50,7 +50,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, onLogout }) => {
                     >
                         <span style={{ fontSize: '1.2rem' }}>{item.icon}</span>
                         {!isCollapsed && <span style={{ marginLeft: '15px' }}>{item.name}</span>}
-                    </NavLink>
+                    </Link>
                 ))}
             </nav>
 
@@ -87,3 +87,4 @@ const s = {
 
 
 export default Sidebar;
+
