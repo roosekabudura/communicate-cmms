@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const api = axios.create({ baseURL: 'http://127.0.0.1:8000' });
+const api = axios.create({ baseURL: 'https://cmms-backend-uhr9.onrender.com' });
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
@@ -10,7 +10,7 @@ api.interceptors.request.use((config) => {
 
 export const authService = {
   login: async (email, password) => {
-    const response = await fetch('http://127.0.0.1:8000/auth/login', {
+    const response = await fetch('https://cmms-backend-uhr9.onrender.com/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
@@ -66,3 +66,4 @@ export const inventoryService = {
 
 
 export default api;
+
