@@ -1,0 +1,71 @@
+/* UNIVERSE HEADER */
+.universe-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 3rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.filter-input {
+  padding: 0.6rem 1rem;
+  border-radius: 20px;
+  border: 1px solid #cbd5e1;
+  width: 300px;
+  margin-top: 10px;
+}
+
+/* FORM CARD STYLING */
+.asset-form-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 5px;
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+/* NODE STATUS COLORS */
+.status-online { border-color: #10b981 !important; }
+.status-offline { border-color: #64748b !important; }
+.status-faulty { border-color: #ef4444 !important; }
+.status-maintenance { border-color: #f59e0b !important; }
+
+.node-type {
+  font-size: 0.6rem;
+  color: #3b82f6;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-save-node {
+  background: #0f172a;
+  color: white;
+  padding: 1rem;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+}
