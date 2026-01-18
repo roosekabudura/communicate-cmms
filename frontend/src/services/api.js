@@ -10,11 +10,30 @@ api.interceptors.request.use((config) => {
 
 export const authService = {
   login: async (email, password) => {
-    const res = await api.post('/auth/login', { email, password });
-    if (res.data.access_token) localStorage.setItem('token', res.data.access_token);
-    return res.data;
+    const response = await fetch('http://127.0.0.1:8000/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Login failed');
+    }
+
+    const data = await response.json();
+    
+    // This saves the token so you stay logged in
+    localStorage.setItem('token', data.token); 
+    
+    // We return the whole data (including the role) back to the Login page
+    return data; 
   },
-  logout: () => { localStorage.removeItem('token'); window.location.href = '/login'; }
+  
+  logout: () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    window.location.href = '/login';
+  }
 };
 
 export const assetService = {
@@ -44,5 +63,6 @@ export const inventoryService = {
   update: (id, data) => api.put(`/inventory/${id}`, data),
   delete: (id) => api.delete(`/inventory/${id}`)
 };
+
 
 export default api;
