@@ -8,11 +8,11 @@ const Inventory = () => {
     });
 
     useEffect(() => { load(); }, []);
-    const load = () => fetch('http://127.0.0.1:8000/inventory').then(res => res.json()).then(setItems);
+    const load = () => fetch('https://cmms-backend-uhr9.onrender.com/inventory').then(res => res.json()).then(setItems);
 
     const handleCreate = async (e) => {
         e.preventDefault();
-        await fetch('http://127.0.0.1:8000/inventory', {
+        await fetch('https://cmms-backend-uhr9.onrender.com/inventory', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)
@@ -84,5 +84,6 @@ const s = {
     saveBtn: { width: '100%', background: '#3b82f6', color: 'white', border: 'none', padding: '12px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' },
     cancelBtn: { width: '100%', background: 'none', border: 'none', marginTop: '10px', color: '#64748b', cursor: 'pointer' }
 };
+
 
 export default Inventory;
