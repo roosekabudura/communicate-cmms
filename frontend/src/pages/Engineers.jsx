@@ -39,7 +39,21 @@ const Engineers = () => {
             console.error("Connection Error:", err);
         }
     };
-
+const handleToggleAvailability = async (engineerId, currentAvailability) => {
+      const newStatus = currentAvailability === "Available" ? "Not Available" : "Available";
+      try {
+          await fetch(`https://your-backend-name.onrender.com/engineers/${engineerId}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ availability: newStatus })
+          });
+          // This tells the browser to refresh the data on the screen
+          fetchEngineers(); 
+      } catch (error) {
+          alert("Could not update status");
+      }
+  };
+    
     return (
         <div style={{ marginLeft: '260px', padding: '50px' }}>
             <div style={{display:'flex', justifyContent:'space-between'}}>
@@ -101,3 +115,4 @@ const s = {
 
 
 export default Engineers;
+
