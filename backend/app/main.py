@@ -149,3 +149,16 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
         "low_stock": db.query(models.Inventory).filter(models.Inventory.quantity < 5).count()
     }
 
+# Put this at the end of main.py
+@app.patch("/engineers/{engineer_id}")
+def update_engineer_status(engineer_id: int, data: dict, db: Session = Depends(get_db)):
+    # 1. Find the engineer in the database
+    engineer = db.query(models.Engineer).filter(models.Engineer.id == engineer_id).first()
+    
+    # 2. Update the availability field
+    if "availability" in data:
+        engineer.availability = data["availability"]
+    
+    # 3. Save it
+    db.commit()
+    return {"message": "Success"}
