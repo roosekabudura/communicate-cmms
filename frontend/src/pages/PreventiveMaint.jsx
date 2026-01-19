@@ -7,11 +7,11 @@ const PreventiveMaint = () => {
         asset_name: '', task_description: '', frequency: 'Monthly', next_due_date: '', assigned_team: ''
     });
 
-    useEffect(() => { fetch('http://127.0.0.1:8000/pm-schedules').then(r => r.json()).then(setSchedules); }, []);
+    useEffect(() => { fetch('https://cmms-backend-uhr9.onrender.com/pm-schedules').then(r => r.json()).then(setSchedules); }, []);
 
     const handleSave = async (e) => {
         e.preventDefault();
-        await fetch('http://127.0.0.1:8000/pm-schedules', {
+        await fetch('https://cmms-backend-uhr9.onrender.com/pm-schedules', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)
@@ -53,5 +53,6 @@ const s = {
     card: { background: 'white', padding: '20px', borderRadius: '15px', border: '1px solid #e2e8f0', position: 'relative' },
     badge: { position: 'absolute', top: '15px', right: '15px', background: '#dcfce7', color: '#166534', padding: '4px 8px', borderRadius: '6px', fontSize: '0.7rem', fontWeight: 'bold' }
 };
+
 
 export default PreventiveMaint;
