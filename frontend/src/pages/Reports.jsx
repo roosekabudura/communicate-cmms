@@ -12,8 +12,8 @@ const Reports = () => {
         const fetchData = async () => {
             try {
                 const [woRes, pmRes] = await Promise.all([
-                    fetch('http://127.0.0.1:8000/work-orders').then(r => r.json()),
-                    fetch('http://127.0.0.1:8000/pm-schedules').then(r => r.json())
+                    fetch('https://cmms-backend-uhr9.onrender.com/work-orders').then(r => r.json()),
+                    fetch('https://cmms-backend-uhr9.onrender.com/pm-schedules').then(r => r.json())
                 ]);
 
                 const total = woRes.length + pmRes.length;
@@ -89,5 +89,6 @@ const s = {
     barRow: { display: 'flex', justifyContent: 'space-between', marginBottom: '15px', padding: '10px', borderBottom: '1px solid #f8fafc' },
     placeholderChart: { height: '150px', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', borderRadius: '10px', marginTop: '20px', border: '1px dashed #cbd5e1' }
 };
+
 
 export default Reports;
