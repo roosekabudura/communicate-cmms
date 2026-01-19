@@ -13,7 +13,7 @@ const Engineers = () => {
     useEffect(() => { load(); }, []);
     
     const load = () => {
-        fetch('http://127.0.0.1:8000/engineers')
+        fetch('https://cmms-backend-uhr9.onrender.com/engineers')
             .then(res => res.json())
             .then(data => setEngineers(data))
             .catch(err => console.error("Load Error:", err));
@@ -22,7 +22,7 @@ const Engineers = () => {
     const handleCreate = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://127.0.0.1:8000/engineers', {
+            const response = await fetch('https://cmms-backend-uhr9.onrender.com/engineers', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
@@ -97,6 +97,7 @@ const s = {
     saveBtn: { width: '100%', background: '#3b82f6', color: 'white', padding: '12px', border: 'none', borderRadius: '8px', cursor: 'pointer' },
     cancelBtn: { width: '100%', background: 'none', border: 'none', marginTop: '10px', cursor: 'pointer' }
 };
+
 
 
 export default Engineers;
