@@ -32,7 +32,7 @@ const WorkOrders = () => {
 
     const loadData = async () => {
         const [woRes, assetRes] = await Promise.all([
-            fetch('http://127.0.0.1:8000/work-orders').then(res => res.json()),
+            fetch('https://cmms-backend-uhr9.onrender.com/work-orders').then(res => res.json()),
             assetService.getAll()
         ]);
         setWorkOrders(woRes);
@@ -41,7 +41,7 @@ const WorkOrders = () => {
 
     const handleCreate = async (e) => {
         e.preventDefault();
-        await fetch('http://127.0.0.1:8000/work-orders', {
+        await fetch('https://cmms-backend-uhr9.onrender.com/work-orders', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(formData)
@@ -170,5 +170,6 @@ const styles = {
     saveBtn: { background: '#3b82f6', color: 'white', border: 'none', padding: '15px', borderRadius: '10px', width: '100%', marginTop: '20px', fontWeight: 'bold', cursor: 'pointer' },
     cancelBtn: { background: 'none', border: 'none', width: '100%', marginTop: '10px', color: '#64748b', cursor: 'pointer' },
 };
+
 
 export default WorkOrders;
