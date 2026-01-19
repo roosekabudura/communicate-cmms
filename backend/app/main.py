@@ -120,7 +120,11 @@ def create_engineer(engineer: schemas.EngineerCreate, db: Session = Depends(get_
     db.commit()
     db.refresh(db_eng)
     return db_eng
-
+@app.get("/engineers/available")
+def get_available_engineers(db: Session = Depends(get_db)):
+    # This filters the database for ONLY 'Available' status
+    return db.query(models.Engineer).filter(models.Engineer.status == "Available").all()
+    
 # --- INVENTORY ROUTES ---
 @app.get("/inventory", response_model=List[schemas.InventoryDisplay])
 def get_inventory(db: Session = Depends(get_db)):
@@ -144,3 +148,4 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
         "engineers": db.query(models.Engineer).count(),
         "low_stock": db.query(models.Inventory).filter(models.Inventory.quantity < 5).count()
     }
+
