@@ -7,10 +7,10 @@ const Dashboard = () => {
         // Fetch counts from backend
         const fetchData = async () => {
             const [a, w, e, i] = await Promise.all([
-                fetch('http://127.0.0.1:8000/assets').then(r => r.json()),
-                fetch('http://127.0.0.1:8000/work-orders').then(r => r.json()),
-                fetch('http://127.0.0.1:8000/engineers').then(r => r.json()),
-                fetch('http://127.0.0.1:8000/inventory').then(r => r.json()),
+                fetch('https://cmms-backend-uhr9.onrender.com/assets').then(r => r.json()),
+                fetch('https://cmms-backend-uhr9.onrender.com/work-orders').then(r => r.json()),
+                fetch('https://cmms-backend-uhr9.onrender.com/engineers').then(r => r.json()),
+                fetch('https://cmms-backend-uhr9.onrender.com/inventory').then(r => r.json()),
             ]);
             setStats({
                 assets: a.length,
@@ -47,5 +47,6 @@ const StatCard = ({ title, value, color }) => (
         <h2 style={{ margin: '10px 0 0 0', fontSize: '2.5rem' }}>{value}</h2>
     </div>
 );
+
 
 export default Dashboard;
