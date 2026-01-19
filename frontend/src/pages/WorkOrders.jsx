@@ -4,7 +4,16 @@ import { assetService, workOrderService } from '../services/api'; // Ensure your
 const WorkOrders = () => {
     const [workOrders, setWorkOrders] = useState([]);
     const [assets, setAssets] = useState([]);
-    const [engineers, setEngineers] = useState([]);
+    const [availableEngineers, setAvailableEngineers] = useState([]);
+    React.useEffect(() => {
+    fetch('https://your-backend-name.onrender.com/engineers')
+        .then(res => res.json())
+        .then(data => {
+            // FILTER: Only keep engineers who are 'Available'
+            const filtered = data.filter(person => person.availability === "Available");
+            setAvailableStaff(filtered);
+        });
+}, []);
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [selectedWO, setSelectedWO] = useState(null);
 
@@ -123,8 +132,8 @@ const WorkOrders = () => {
                             <div><label>Site ID</label><select onChange={e => setFormData({...formData, site_id: e.target.value})}>{options.sites.map(o => <option key={o}>{o}</option>)}</select></div>
                             <div><label>SLA Deadline</label><input type="datetime-local" required onChange={e => setFormData({...formData, sla_deadline: e.target.value})}/></div>
                             <div><label>Service Affected</label><select onChange={e => setFormData({...formData, service_affected: e.target.value})}>{options.services.map(o => <option key={o}>{o}</option>)}</select></div>
-                            <div><label>Assigned Engineer</label><select onChange={e => setFormData({...formData, assigned_engineer: e.target.value})}> <option value="">Unassigned</option> {engineers.map(eng => (
-            <option key={eng.id} value={eng.name}>{eng.name} ({eng.specialization})</option>))} </select> </div>
+                            <div><label>Assign to Available Engineer:</label> <select  name="assigned_to" required onChange={handleInputChange}     style={{ width: '100%', padding: '10px', borderRadius: '5px' }}
+                            > <option value="">-- Select Personnel --</option>{availableStaff.map(staff => (<option key={staff.id} value={staff.name}>{staff.name} ({staff.specialization})</option>))}</select> </div>
                             
                             <div><label>Safety Permit</label><select onChange={e => setFormData({...formData, safety_permit: e.target.value})}>{options.safety.map(o => <option key={o}>{o}</option>)}</select></div>
                         </div>
@@ -173,3 +182,4 @@ const styles = {
 
 
 export default WorkOrders;
+
