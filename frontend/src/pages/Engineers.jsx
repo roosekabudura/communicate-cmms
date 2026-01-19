@@ -15,8 +15,11 @@ const Engineers = () => {
     const load = () => {
         fetch('https://cmms-backend-uhr9.onrender.com/engineers')
             .then(res => res.json())
-            .then(data => setEngineers(data))
-            .catch(err => console.error("Load Error:", err));
+            .then(data => setEngineers(Array.isArray(data) ? data : []))
+            .catch(err => {
+                console.error("Load Error:", err);
+                setEngineers([]); // Prevents crash on error
+            });
     };
 
     const handleCreate = async (e) => {
@@ -29,16 +32,16 @@ const Engineers = () => {
             });
             if (response.ok) {
                 setIsAddOpen(false);
+                setFormData({ name: '', specialization: 'RF', contact: '', availability: 'Available' }); // Reset form
                 load();
             } else {
-                alert("Server rejected the data.");
+                alert("Server rejected the data. Check if eng_id is required.");
             }
         } catch (err) {
             console.error("Connection Error:", err);
         }
     };
 
-    // FIXED: Changed fetchEngineers() to load() to match your code
     const handleToggleAvailability = async (engineerId, currentAvailability) => {
       const newStatus = currentAvailability === "Available" ? "Not Available" : "Available";
       try {
@@ -47,9 +50,9 @@ const Engineers = () => {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ availability: newStatus })
           });
-          load(); // This refreshes the list
+          load(); 
       } catch (error) {
-          alert("Could not update status");
+          alert("Could not update status. Is the Backend PATCH route ready?");
       }
     };
     
@@ -61,9 +64,9 @@ const Engineers = () => {
             </div>
             
             <div style={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:'20px', marginTop:'30px'}}>
-                {engineers.map(eng => (
+                {(engineers || []).map(eng => (
                     <div key={eng.id} style={s.card}>
-                        <small>{eng.eng_id}</small>
+                        <small style={{color:'#64748b'}}>{eng.eng_id || 'TEMP-ID'}</small>
                         <h3>{eng.name}</h3>
                         <p><strong>Skill:</strong> {eng.specialization}</p>
                         <p><strong>Contact:</strong> {eng.contact}</p>
@@ -75,7 +78,8 @@ const Engineers = () => {
                                 backgroundColor: eng.availability === 'Available' ? '#f0fdf4' : '#fef2f2',
                                 padding: '5px 10px',
                                 borderRadius: '8px',
-                                fontSize: '0.8rem'
+                                fontSize: '0.8rem',
+                                border: `1px solid ${eng.availability === 'Available' ? '#bbf7d0' : '#fecaca'}`
                             }}>
                                 {eng.availability || 'Available'}
                             </span>
@@ -85,7 +89,7 @@ const Engineers = () => {
                             onClick={() => handleToggleAvailability(eng.id, eng.availability)}
                             style={s.toggleBtn}
                         >
-                            Change Availability
+                            Change Status
                         </button>
                     </div>
                 ))}
@@ -95,17 +99,33 @@ const Engineers = () => {
                 <div style={s.overlay}>
                     <form style={s.modal} onSubmit={handleCreate}>
                         <h2>New Engineer</h2>
-                        <input placeholder="Name" required onChange={e => setFormData({...formData, name: e.target.value})} style={s.input}/>
+                        <input 
+                            placeholder="Full Name" 
+                            value={formData.name}
+                            required 
+                            onChange={e => setFormData({...formData, name: e.target.value})} 
+                            style={s.input}
+                        />
                         
-                        <label>Skill / Specialization</label>
-                        <select onChange={e => setFormData({...formData, specialization: e.target.value})} style={s.input}>
+                        <label>Specialization</label>
+                        <select 
+                            value={formData.specialization}
+                            onChange={e => setFormData({...formData, specialization: e.target.value})} 
+                            style={s.input}
+                        >
                             <option value="RF">RF</option>
                             <option value="Fiber">Fiber</option>
                             <option value="Electrical">Electrical</option>
                             <option value="Mechanical">Mechanical</option>
                         </select>
 
-                        <input placeholder="Contact" required onChange={e => setFormData({...formData, contact: e.target.value})} style={s.input}/>
+                        <input 
+                            placeholder="Phone / Email" 
+                            value={formData.contact}
+                            required 
+                            onChange={e => setFormData({...formData, contact: e.target.value})} 
+                            style={s.input}
+                        />
                         
                         <button type="submit" style={s.saveBtn}>Save Engineer</button>
                         <button type="button" onClick={() => setIsAddOpen(false)} style={s.cancelBtn}>Cancel</button>
@@ -118,13 +138,13 @@ const Engineers = () => {
 
 const s = {
     addBtn: { background: '#0f172a', color: 'white', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', border: 'none' },
-    card: { background: 'white', padding: '20px', borderRadius: '15px', border: '1px solid #ddd', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' },
-    toggleBtn: { backgroundColor: '#3b82f6', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '4px', cursor: 'pointer', width: '100%', marginTop: '10px' },
-    overlay: { position: 'fixed', top:0, left:0, right:0, bottom:0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 },
-    modal: { background: 'white', padding: '30px', borderRadius: '20px', width: '400px' },
-    input: { width: '100%', padding: '10px', marginBottom: '15px', borderRadius: '8px', border: '1px solid #ddd' },
-    saveBtn: { width: '100%', background: '#3b82f6', color: 'white', padding: '12px', border: 'none', borderRadius: '8px', cursor: 'pointer' },
-    cancelBtn: { width: '100%', background: 'none', border: 'none', marginTop: '10px', cursor: 'pointer' }
+    card: { background: 'white', padding: '20px', borderRadius: '15px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' },
+    toggleBtn: { backgroundColor: '#3b82f6', color: 'white', border: 'none', padding: '10px', borderRadius: '8px', cursor: 'pointer', width: '100%', marginTop: '10px', fontWeight: '500' },
+    overlay: { position: 'fixed', top:0, left:0, right:0, bottom:0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, backdropFilter: 'blur(4px)' },
+    modal: { background: 'white', padding: '30px', borderRadius: '20px', width: '400px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' },
+    input: { width: '100%', padding: '12px', marginBottom: '15px', borderRadius: '8px', border: '1px solid #cbd5e1' },
+    saveBtn: { width: '100%', background: '#3b82f6', color: 'white', padding: '12px', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' },
+    cancelBtn: { width: '100%', background: 'none', border: 'none', marginTop: '10px', cursor: 'pointer', color: '#64748b' }
 };
 
 export default Engineers;
