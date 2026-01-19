@@ -7,7 +7,7 @@ const Engineers = () => {
         name: '', 
         specialization: 'RF', 
         contact: '', 
-        availability: 'Available' // Add this 
+        availability: 'Available' 
     });
 
     useEffect(() => { load(); }, []);
@@ -31,28 +31,27 @@ const Engineers = () => {
                 setIsAddOpen(false);
                 load();
             } else {
-                const errorData = await response.json();
-                console.log("Backend Error Details:", errorData);
-                alert("Server rejected the data. Check console.");
+                alert("Server rejected the data.");
             }
         } catch (err) {
             console.error("Connection Error:", err);
         }
     };
-const handleToggleAvailability = async (engineerId, currentAvailability) => {
+
+    // FIXED: Changed fetchEngineers() to load() to match your code
+    const handleToggleAvailability = async (engineerId, currentAvailability) => {
       const newStatus = currentAvailability === "Available" ? "Not Available" : "Available";
       try {
-          await fetch(`https://your-backend-name.onrender.com/engineers/${engineerId}`, {
+          await fetch(`https://cmms-backend-uhr9.onrender.com/engineers/${engineerId}`, {
               method: 'PATCH',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ availability: newStatus })
           });
-          // This tells the browser to refresh the data on the screen
-          fetchEngineers(); 
+          load(); // This refreshes the list
       } catch (error) {
           alert("Could not update status");
       }
-  };
+    };
     
     return (
         <div style={{ marginLeft: '260px', padding: '50px' }}>
@@ -66,8 +65,28 @@ const handleToggleAvailability = async (engineerId, currentAvailability) => {
                     <div key={eng.id} style={s.card}>
                         <small>{eng.eng_id}</small>
                         <h3>{eng.name}</h3>
-                        <p>{eng.specialization}</p>
-                        <span style={{background: '#dcfce7', padding:'5px 10px', borderRadius:'10px'}}>{eng.status}</span>
+                        <p><strong>Skill:</strong> {eng.specialization}</p>
+                        <p><strong>Contact:</strong> {eng.contact}</p>
+                        
+                        <div style={{ margin: '15px 0' }}>
+                            <span style={{ 
+                                color: eng.availability === 'Available' ? '#16a34a' : '#dc2626',
+                                fontWeight: 'bold',
+                                backgroundColor: eng.availability === 'Available' ? '#f0fdf4' : '#fef2f2',
+                                padding: '5px 10px',
+                                borderRadius: '8px',
+                                fontSize: '0.8rem'
+                            }}>
+                                {eng.availability || 'Available'}
+                            </span>
+                        </div>
+
+                        <button 
+                            onClick={() => handleToggleAvailability(eng.id, eng.availability)}
+                            style={s.toggleBtn}
+                        >
+                            Change Availability
+                        </button>
                     </div>
                 ))}
             </div>
@@ -77,22 +96,17 @@ const handleToggleAvailability = async (engineerId, currentAvailability) => {
                     <form style={s.modal} onSubmit={handleCreate}>
                         <h2>New Engineer</h2>
                         <input placeholder="Name" required onChange={e => setFormData({...formData, name: e.target.value})} style={s.input}/>
+                        
+                        <label>Skill / Specialization</label>
                         <select onChange={e => setFormData({...formData, specialization: e.target.value})} style={s.input}>
                             <option value="RF">RF</option>
                             <option value="Fiber">Fiber</option>
                             <option value="Electrical">Electrical</option>
+                            <option value="Mechanical">Mechanical</option>
                         </select>
-                        <label>Skill / Specialization</label>
-<input onChange={e => setFormData({...formData, specialization: e.target.value})} style={s.input}/>
 
-<label>Availability Status</label>
-<select onChange={e => setFormData({...formData, availability: e.target.value})} style={s.input}>
-    <option value="Available">Available</option>
-    <option value="On-Site">On-Site</option>
-    <option value="On Leave">On Leave</option>
-    <option value="Standby">Standby</option>
-</select>
                         <input placeholder="Contact" required onChange={e => setFormData({...formData, contact: e.target.value})} style={s.input}/>
+                        
                         <button type="submit" style={s.saveBtn}>Save Engineer</button>
                         <button type="button" onClick={() => setIsAddOpen(false)} style={s.cancelBtn}>Cancel</button>
                     </form>
@@ -103,8 +117,9 @@ const handleToggleAvailability = async (engineerId, currentAvailability) => {
 };
 
 const s = {
-    addBtn: { background: '#0f172a', color: 'white', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer' },
-    card: { background: 'white', padding: '20px', borderRadius: '15px', border: '1px solid #ddd' },
+    addBtn: { background: '#0f172a', color: 'white', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', border: 'none' },
+    card: { background: 'white', padding: '20px', borderRadius: '15px', border: '1px solid #ddd', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' },
+    toggleBtn: { backgroundColor: '#3b82f6', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '4px', cursor: 'pointer', width: '100%', marginTop: '10px' },
     overlay: { position: 'fixed', top:0, left:0, right:0, bottom:0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 },
     modal: { background: 'white', padding: '30px', borderRadius: '20px', width: '400px' },
     input: { width: '100%', padding: '10px', marginBottom: '15px', borderRadius: '8px', border: '1px solid #ddd' },
@@ -112,7 +127,4 @@ const s = {
     cancelBtn: { width: '100%', background: 'none', border: 'none', marginTop: '10px', cursor: 'pointer' }
 };
 
-
-
 export default Engineers;
-
