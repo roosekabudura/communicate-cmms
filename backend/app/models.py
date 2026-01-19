@@ -60,8 +60,7 @@ class Engineer(Base):
     specialization = Column(String)
     contact = Column(String)
     status = Column(String, default="Available")
-    specialization = Column(String) # This serves as 'Skill'
-    availability = Column(String, default="Available")
+    
 
 @event.listens_for(Engineer, 'before_insert')
 def receive_eng_before_insert(mapper, connection, target):
@@ -86,4 +85,5 @@ class PMSchedule(Base):
     frequency = Column(String) # Weekly, Monthly, Quarterly
     next_due_date = Column(String)
     assigned_team = Column(String)
+
     last_completed = Column(String, nullable=True)
